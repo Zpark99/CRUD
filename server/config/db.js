@@ -1,5 +1,7 @@
-require('dotenv').config();
-const mysql = require('mysql2/promise');
+import dotenv from 'dotenv';
+import mysql from 'mysql2/promise'; // require -> import
+
+dotenv.config();
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
@@ -12,7 +14,7 @@ const pool = mysql.createPool({
   queueLimit: 0
 });
 
-// 서버 시작할 때 연결 확인
+// 서버 시작할 때 연결 확인 (이 부분은 그대로 유지)
 (async () => {
   try {
     const connection = await pool.getConnection();
@@ -23,4 +25,4 @@ const pool = mysql.createPool({
   }
 })();
 
-module.exports = pool;
+export default pool; // module.exports -> export default
