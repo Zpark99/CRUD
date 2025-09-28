@@ -1,10 +1,10 @@
 import './App.css'
-import PostList from './components/PostList'
+import Router from '../share/Router';
 
 function App() {
-  return <PostList />;
+ return <Router />;
    
   
 }
 
-export default App
+export default App;

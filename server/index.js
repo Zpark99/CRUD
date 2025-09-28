@@ -38,8 +38,25 @@ index.get('/api/posts', async (req, res) => {
   }
 });
 
+// [GET] /api/posts/:id - 특정 게시글 조회 // 근데 조회 시간이 너무 오래 걸린다아아아..
+index.get('/api/posts/:id', async (req, res) => {
+  const { id } = req.params;
+  const query = 'SELECT * FROM posts ORDER BY id DESC';
+  try {
+    const [results] = await db.query(query, [id]);
+
+    if (results.length === 0) {
+      return res.status(404).send('Post not found');
+    }
+    res.status(200).json(results[id]);
+  } catch (err) {
+    console.error('데이터베이스 쿼리 오류:', err);
+    res.status(500).send('Error fetching posts');
+  }
+});
+
 // 게시글 수정 API
-index.put('/api/posts/:id', async (req, res) => {
+index.put('/api/posts/', async (req, res) => {
   const { id } = req.params;
   const { title, content } = req.body;
   const query = 'UPDATE posts SET title = ?, content = ? WHERE id = ?';
@@ -61,7 +78,7 @@ index.delete('/api/posts/:id', async (req, res) => {
 
   const query = 'DELETE FROM posts WHERE id = ?';
 
-  try{
+  try {
     const [result] = await db.query(query, [id]);
     console.log('[DELETE] DB 쿼리 성공:', result);
     console.log('[DELETE] 삭제된 행 수:', result.affectedRows);

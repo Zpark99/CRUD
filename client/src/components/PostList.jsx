@@ -1,6 +1,7 @@
 // 게시글 목록 페이지
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from 'axios';
+import { Link } from "react-router-dom";
 
 function PostList() {
   const [posts, setPosts] = useState([]);
@@ -18,12 +19,19 @@ function PostList() {
   return (
     <div>
       <h1>게시판</h1>
+      <div>
+        글 쓰기
+        <Link to="/postform">
+          <button>글 작성</button>
+        </Link>
+      </div>
       <ul>
-        {/* posts가 배열이 아닐 수도 있는 상황을 대비한 방어 코드(Optional Chaining) */}
-        {posts?.map(post => (
+        {posts.map(post => (
           <li key={post.id}>
             <h3>{post.title}</h3>
             <p>{post.content}</p>
+            {/* 추가 */}
+            <Link to={`/post/${post.id}`}>상세 보기</Link>
           </li>
         ))}
       </ul>
