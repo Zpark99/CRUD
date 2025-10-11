@@ -18,14 +18,19 @@ export const editPost = async (postId, updatedData) => {
   }
 };
 
-export const deletePost = async (postId) => { 
+export const deletePost = async (postId) => {
   try {
-    const response = await fetch(`/api/posts/${postId}`, { method: 'DELETE', })
-    
+    const response = await fetch(`/api/posts/${postId}`, { method: 'DELETE' });
+
     if (response.ok) {
       return { success: true };
     } else {
-      const errorData = await response.json();
+      let errorData = {};
+      try {
+        errorData = await response.json();
+      } catch {
+        errorData = { message: 'Unknown error (no JSON returned)' };
+      }
       return { success: false, error: errorData.message || 'Failed to delete post' };
     }
   } catch (error) {

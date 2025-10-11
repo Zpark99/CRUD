@@ -5,8 +5,8 @@ import cors from 'cors';
 const index = express();
 const port = 3000;
 
-index.use(express.json());
 index.use(cors());
+index.use(express.json());
 
 // 게시글 작성 API
 index.post('/api/posts', async (req, res) => {
@@ -38,20 +38,39 @@ index.get('/api/posts', async (req, res) => {
   }
 });
 
-// [GET] /api/posts/:id - 특정 게시글 조회 // 근데 조회 시간이 너무 오래 걸린다아아아..
+// // [GET] /api/posts/:id - 특정 게시글 조회
+// index.get('/api/posts/:id', async (req, res) => {
+//   const { id } = req.params;
+//   const query = 'SELECT * FROM posts ORDER BY id DESC';
+//   try {
+//     const [results] = await db.query(query, [id]);
+
+//     if (results.length === 0) {
+//       return res.status(404).send('Post not found');
+//     }
+//     res.status(200).json(results[id]);
+//   } catch (err) {
+//     console.error('데이터베이스 쿼리 오류:', err);
+//     res.status(500).send('Error fetching posts');
+//   }
+// });
+
+// [GET] /api/posts/:id - 특정 게시글 조회 // 수정 버전
 index.get('/api/posts/:id', async (req, res) => {
   const { id } = req.params;
-  const query = 'SELECT * FROM posts ORDER BY id DESC';
+  const query = 'SELECT * FROM posts WHERE id = ?'; // ✅ id 조건 추가
+
   try {
-    const [results] = await db.query(query, [id]);
+    const [results] = await db.query(query, [id]); // ✅ id를 실제 파라미터로 전달
 
     if (results.length === 0) {
       return res.status(404).send('Post not found');
     }
-    res.status(200).json(results[id]);
+
+    res.status(200).json(results[0]); // ✅ 첫 번째(단일) 결과만 반환
   } catch (err) {
     console.error('데이터베이스 쿼리 오류:', err);
-    res.status(500).send('Error fetching posts');
+    res.status(500).send('Error fetching post');
   }
 });
 
