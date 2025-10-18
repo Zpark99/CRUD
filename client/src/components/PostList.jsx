@@ -17,26 +17,42 @@ function PostList() {
   }, []);
 
   return (
-    <div>
-      <h1>게시판</h1>
-      <div>
-        글 쓰기
-        <Link to="/postform">
-          <button>글 작성</button>
+    <div className="container mt-5">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h1 className="fw-hold">게시판</h1>
+        <Link to="/postform" className="btn btn-primary">
+          글쓰기
         </Link>
       </div>
-      <ul>
-        {posts.map(post => (
-          <li key={post.id}>
-            <h3>{post.title}</h3>
-            <p>{post.content}</p>
-            {/* 추가 */}
-            <Link to={`/post/${post.id}`}>상세 보기</Link>
-          </li>
+
+      <table className="table table-striped table-bordered text-center align-middle">
+        <thead className="table-light">
+          <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>내용</th>
+            <th>작성일</th>
+            <th>상세보기</th>
+          </tr>
+      </thead>
+      <tbody>
+        {posts.map((post) => (
+          <tr key={post.id}>
+            <td>{post.id}</td>
+            <td>{post.title}</td>
+            <td>{post.content}</td>
+            <td>{new Date(post.created_at).toLocaleDateString()}</td>
+            <td>
+              <Link to={`/post/${post.id}`} className="btn btn-outline-primary btn-sm">
+                상세 보기
+              </Link>
+            </td>
+          </tr>
         ))}
-      </ul>
+        </tbody>
+      </table>
     </div>
-  )
+  );
 }
 
 export default PostList;

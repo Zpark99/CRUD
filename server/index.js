@@ -8,7 +8,7 @@ const port = 3000;
 index.use(cors());
 index.use(express.json());
 
-// 게시글 작성 API
+// 게시글 작성 API, validatePost 추가 
 index.post('/api/posts', async (req, res) => {
   console.log('API 요청 받음:', req.body);
   const { title, content } = req.body;
@@ -38,44 +38,48 @@ index.get('/api/posts', async (req, res) => {
   }
 });
 
-// // [GET] /api/posts/:id - 특정 게시글 조회
-// index.get('/api/posts/:id', async (req, res) => {
-//   const { id } = req.params;
-//   const query = 'SELECT * FROM posts ORDER BY id DESC';
-//   try {
-//     const [results] = await db.query(query, [id]);
-
-//     if (results.length === 0) {
-//       return res.status(404).send('Post not found');
-//     }
-//     res.status(200).json(results[id]);
-//   } catch (err) {
-//     console.error('데이터베이스 쿼리 오류:', err);
-//     res.status(500).send('Error fetching posts');
-//   }
-// });
-
 // [GET] /api/posts/:id - 특정 게시글 조회 // 수정 버전
 index.get('/api/posts/:id', async (req, res) => {
   const { id } = req.params;
-  const query = 'SELECT * FROM posts WHERE id = ?'; // ✅ id 조건 추가
+  const query = 'SELECT * FROM posts WHERE id = ?'; // id 조건 추가
 
   try {
-    const [results] = await db.query(query, [id]); // ✅ id를 실제 파라미터로 전달
+    const [results] = await db.query(query, [id]); // id를 실제 파라미터로 전달
 
     if (results.length === 0) {
       return res.status(404).send('Post not found');
     }
-
-    res.status(200).json(results[0]); // ✅ 첫 번째(단일) 결과만 반환
+    
+    console.log(`[GET] 게시글 ${id} 조회 성공`);
+    res.status(200).json(results[0]); // 첫 번째(단일) 결과만 반환
   } catch (err) {
     console.error('데이터베이스 쿼리 오류:', err);
-    res.status(500).send('Error fetching post');
+    res.status(500).json({ message: 'Error fetching post' });
+  }
+});
+
+// 조회수 증가 API 
+index.patch('/api/posts/:id/view', async (req, res) => {
+  const { id } = req.params;
+  const query = 'UPDATE posts SET view_cnt = view_cnt + 1 WHERE id =?';
+
+  try {
+    const [result] = await db.query(query, [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    console.log(`[PATCH] 게시글 ${id} 조회수 +1`);
+    res.status(200).send('조회수 증가 성공');
+  } catch (err) {
+    console.error('[PATCH] 조회수 증가 오류:', err);
+    res.status(500).json({ message: '조회수 증가 실패'});
   }
 });
 
 // 게시글 수정 API
-index.put('/api/posts/', async (req, res) => {
+index.put('/api/posts/:id', async (req, res) => {
   const { id } = req.params;
   const { title, content } = req.body;
   const query = 'UPDATE posts SET title = ?, content = ? WHERE id = ?';
@@ -89,6 +93,7 @@ index.put('/api/posts/', async (req, res) => {
     res.status(500).send('Error updating post', err);
   }
 });
+
 
 // 게시글 삭제 API
 index.delete('/api/posts/:id', async (req, res) => {
@@ -112,6 +117,15 @@ index.delete('/api/posts/:id', async (req, res) => {
     res.status(500).send('Error deleting post', err);
   }
 });
+
+// 검증 미들웨어 작성 - 게시글 작성 및 수정 반영
+const validatePost = (req, res, next) => {
+  const { title, content } = req.body;
+  if( !title || !content || title.trim() === '' || content.trim() === '') {
+    return res.status(400).json({ message: '제목과 내용을 모두 입력해야 합니다.' });
+  }
+  next();
+};
 
 // 서버 실행
 index.listen(port, () => {

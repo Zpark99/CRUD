@@ -3,6 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
 function PostForm({ setPosts }) {
   const [title, setTitle] = useState('');
@@ -10,43 +11,57 @@ function PostForm({ setPosts }) {
   const navigate = useNavigate(); 
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-
-    axios.post('http://localhost:3000/api/posts', { title, content })
-      .then(() => {
-        alert('게시글이 작성되었습니다.');
-        setTitle('');
-        setContent('');
-
-      axios.get('http://localhost:3000/api/posts')
-        .then((response) => setPosts(response.data))
-        .catch((error) => console.error('Error fetching posts:', error));
-
-      navigate('/');
-      })
-      .catch((error) => console.error('Error creating post:', error));
+    	e.preventDefault();
+        
+        axios.post('http://localhost:3000/api/posts', {title, content })
+        	.then((response) => {
+              setPosts(response.data);
+        	    navigate('/');
+        })
+   		 .catch((error) => console.error('Error creating post:', error));
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>새 게시글 작성</h2>
-      <div>
-        <label htmlFor="title">제목</label>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="content">내용</label>
-        <textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        ></textarea>
-      </div>
-      <button type="submit">작성</button>
-    </form>
+    <Container style={{ maxWidth: '800px', marginTop: '50px' }}>
+      <h2 className="mb-5">새 게시글 작성</h2>
+      
+      <Form onSubmit={handleSubmit}>
+        {/* 제목 입력 */}
+        <Form.Group className="mb-3">
+          <Form.Label>제목</Form.Label>
+          <Col md={10}>
+          <Form.Control 
+                type="text" 
+                value={title} 
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="제목을 입력하세요"
+          />
+          </Col>
+        </Form.Group>
+      
+      <Form.Group as={Row} className="mb-4">
+        <Form.Label column sm={2}>
+          내용
+
+        </Form.Label>
+          <Col sm={10}>
+            <Form.Control
+              as="textarea"
+              rows={10}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="내용을 입력하세요"
+            />
+          </Col>
+        </Form.Group>
+              
+        <div className="text-end">
+          <Button variant="primary" type="submit">
+            작성
+          </Button>
+        </div>
+      </Form>
+     </Container>      
   );
 }
 
