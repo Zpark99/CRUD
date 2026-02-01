@@ -4,6 +4,10 @@ import { useNavigate, useParams } from "react-router-dom"
 import { editPost } from "../../share/api";
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
+const API_URL = import.meta.env_VITE_API_BASE_URL;
+
+// API_URL 수정완료 
+
 const PostEdit = () => {
    const { id } = useParams();
    const navigate = useNavigate();
@@ -11,7 +15,7 @@ const PostEdit = () => {
    const [content, setContent] = useState('');
 
    useEffect(() => {
-    axios.get(`/api/posts/${id}`)
+    axios.get(`${API_URL}/api/posts/${id}`)
         .then(response => {
                 setTitle(response.data.title || '');
                 setContent(response.data.content || '');

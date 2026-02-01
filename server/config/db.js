@@ -14,8 +14,7 @@ const pool = mysql.createPool({
   queueLimit: 0
 });
 
-// 서버 시작할 때 연결 확인 (이 부분은 그대로 유지)
-(async () => {
+// 서버 시작할 때 연결 확인 (이 부분은 그대로 유지) -> top level await
   try {
     const connection = await pool.getConnection();
     console.log('✅ MySQL 연결 성공');
@@ -23,6 +22,5 @@ const pool = mysql.createPool({
   } catch (err) {
     console.error('❌ MySQL 연결 실패:', err.message);
   }
-})();
 
 export default pool; // module.exports -> export default

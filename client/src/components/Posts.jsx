@@ -1,12 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+
 function Posts() {
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get('/api/posts')
+    axios.get(`${API_URL}/api/posts`)
       .then(response => setPosts(response.data))
       .catch(err => {
         console.error(err); // 로그 출력

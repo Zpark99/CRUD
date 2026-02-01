@@ -1,37 +1,36 @@
-# client, server 동시 적용
-
-# Logs
+# Logs - 디버그 및 로그 파일 제외
 logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# 공통
+# 의존성 파일 - 용량이 크므로 절대 올리지 않음
 node_modules/
-.env
-
-# client 전용
 client/node_modules/
+server/node_modules/
+
+# 빌드 결과물 - 빌드할 때마다 생성되므로 제외
+dist/
+dist-ssr/
 client/dist/
 
-# server 전용
-server/node_modules/
+# 환경변수
+.env
+.env.local
+.env.*.local
+client/.env
 server/.env
+client/.env*
+server/.env*
+
+# 에디터 설정 파일
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.sw?
+
+# OS 및 기타
+Thumbs.db

@@ -3,18 +3,21 @@ import { useState, useEffect } from "react";
 import axios from 'axios';
 import { Link } from "react-router-dom";
 
+// API_URL 수정완료 
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+
 function PostList() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/posts')
+    axios.get(`${API_URL}/api/posts`)
       .then(response => {
         console.log(response.data); // 여기에 [ { id: 1..., }, { id: 2... }, ] 형태로 찍힘.
         
         setPosts(response.data)
       })
       .catch((err) => console.error(err));
-  }, []);
+  });
 
   return (
     <div className="container mt-5">

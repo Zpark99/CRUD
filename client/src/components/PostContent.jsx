@@ -4,16 +4,20 @@ import axios from "axios";
 import { deletePost } from "../../share/api";
 import { Container, Row, Col, Button } from "react-bootstrap";
 
+// API_URL 수정완료 
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+
 const PostContent = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [post, setPost] = useState(null);
+  const [post, setPost] = useState(null);  
 
   useEffect(() => {
     console.log("### 게시글 요청 시작:", id);
 
     axios
-      .get(`http://localhost:3000/api/posts/${id}`)
+      .get(`${API_URL}/api/posts/${id}`)
       .then((response) => {
         console.log("### 게시글 응답 데이터:", response.data);
         setPost(response.data);
@@ -21,7 +25,7 @@ const PostContent = () => {
         // 조회수 증가 API 호출
         console.log("### 조회수 증가 API 호출");
         axios
-          .patch(`http://localhost:3000/api/posts/${id}/view`)
+          .patch(`${API_URL}/api/posts/${id}/view`)
           .catch((error) => console.error("조회수 증가 오류:", error));
       })
       .catch((error) => console.error("게시글 불러오기 오류:", error));

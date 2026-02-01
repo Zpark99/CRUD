@@ -5,8 +5,14 @@ import cors from 'cors';
 const index = express();
 const port = 3000;
 
-index.use(cors());
+// 백엔드 코드 수정 
+index.use(cors({
+  origin: 'https://d3hkrvr14wb43j.cloudfront.net',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  credentials: true
+}));
 index.use(express.json());
+
 
 // 게시글 작성 API, validatePost 추가 
 index.post('/api/posts', async (req, res) => {
@@ -127,7 +133,7 @@ const validatePost = (req, res, next) => {
   next();
 };
 
-// 서버 실행
+// 서버 실행 // 
 index.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`Server running on port ${port}`);
 });
