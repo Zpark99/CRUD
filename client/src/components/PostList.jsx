@@ -12,17 +12,16 @@ function PostList() {
   useEffect(() => {
     axios.get(`${API_URL}/api/posts`)
       .then(response => {
-        console.log(response.data); // 여기에 [ { id: 1..., }, { id: 2... }, ] 형태로 찍힘.
-        
+      
         setPosts(response.data)
       })
       .catch((err) => console.error(err));
-  });
+  }, []);
 
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1 className="fw-hold">게시판</h1>
+        <h1 className="fw-bold">게시판</h1>
         <Link to="/postform" className="btn btn-primary">
           글쓰기
         </Link>
