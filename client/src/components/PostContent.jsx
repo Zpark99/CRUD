@@ -5,6 +5,7 @@ import { deletePost } from "../../share/api";
 import { Container, Row, Col, Button } from "react-bootstrap";
 
 // API_URL 수정완료 
+// console.log 수정
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -14,16 +15,14 @@ const PostContent = () => {
   const [post, setPost] = useState(null);  
 
   useEffect(() => {
-    console.log("### 게시글 요청 시작:", id);
-
+    // console.log("### 게시글 요청 시작:", id);
+    // refactroing 하면 좋음 get -> try/await
     axios
       .get(`${API_URL}/api/posts/${id}`)
       .then((response) => {
-        console.log("### 게시글 응답 데이터:", response.data);
         setPost(response.data);
 
         // 조회수 증가 API 호출
-        console.log("### 조회수 증가 API 호출");
         axios
           .patch(`${API_URL}/api/posts/${id}/view`)
           .catch((error) => console.error("조회수 증가 오류:", error));

@@ -29,10 +29,10 @@ const PostEdit = () => {
       const result = await editPost(id, updatedData);
 
       if (result.success){
-          alert('Post updated successfully');
+          alert('게시글이 성공적으로 작성되었습니다.');
           navigate('/');
       } else {
-        alert(result.error || 'Failed to update post' );
+        alert(result.error || '게시글 작성에 실패했습니다.' );
       }
    };
 
