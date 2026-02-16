@@ -17,7 +17,7 @@ AWS EC2와 S3를 활용하여 배포까지 직접 구현했습니다.
 3. **AWS 클라우드 배포 완료**
 
 ## 📸 실행 화면
-<img width="958" height="538" alt="처음으로 완성!" src="https://github.com/user-attachments/assets/ed43994e-6adc-4bdf-942b-c2224f14aaba" />
+<img width="958" height="538" alt="처음으로 완성!" src="https://github.com/user-attachments/assets/fe1c8881-91ad-453f-95b2-bfc22c7cd1b8" />
 
 ## 🚀 트러블 슈팅 (Trouble Shooting)
 
